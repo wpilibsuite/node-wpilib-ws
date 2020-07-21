@@ -4,7 +4,8 @@
   "description": "WebSocket server for interfacing with non-FRC hardware",
   "main": "package.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node ./dist/apps/debug-server.js"
   },
   "repository": {
     "type": "git",
