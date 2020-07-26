@@ -44,6 +44,7 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
 
     public startServer() {
         this._httpServer.listen(this._port);
+        this.emit("ready");
     }
 
     protected _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void {
