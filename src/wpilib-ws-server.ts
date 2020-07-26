@@ -2,30 +2,31 @@ import WebSocket from "ws";
 import http from "http";
 import net from "net";
 import url from "url";
-import { EventEmitter } from "events";
 
-export interface WPILibWSConfig {
+import WPILibWSInterface from "./protocol/wpilib-ws-interface";
+import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, isValidWpilibWsMsg, IWpilibWsMsg } from "./protocol/wpilib-ws-proto-messages";
+
+
+export interface WPILibWSServerConfig {
     port?: number;
     uri?: string;
+    startOnCreate?: boolean;
 }
 
-export class WPILibWebSocketServer extends EventEmitter {
+export default class WPILibWebSocketServer extends WPILibWSInterface {
     private _uri: string = "/wpilibws";
     private _port: number = 8080;
     private _httpServer: http.Server;
     private _wss: WebSocket.Server;
     private _activeSocket: WebSocket | null = null;
 
-    constructor(config?: WPILibWSConfig) {
+    constructor(config?: WPILibWSServerConfig) {
         super();
-        if (config) {
-            if (config.port) {
-                this._port = config.port;
-            }
-
-            if (config.uri) {
-                this._uri = config.uri;
-            }
+        if (config?.port) {
+            this._port = config.port;
+        }
+        if (config?.uri) {
+            this._uri = config.uri;
         }
 
         this._httpServer = http.createServer();
@@ -35,10 +36,20 @@ export class WPILibWebSocketServer extends EventEmitter {
         });
 
         this._hookupServerEvents();
+
+        if (config?.startOnCreate) {
+            this.startServer();
+        }
     }
 
-    public start() {
+    public startServer() {
         this._httpServer.listen(this._port);
+    }
+
+    protected _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void {
+        if (this._activeSocket) {
+            this._activeSocket.send(JSON.stringify(msg));
+        }
     }
 
     private _hookupServerEvents() {
@@ -53,6 +64,7 @@ export class WPILibWebSocketServer extends EventEmitter {
                     return;
                 }
 
+                // Handle the WebSocket upgrade
                 this._wss.handleUpgrade(request, socket, head, (ws) => {
                     this._wss.emit("connection", ws, request);
                 });
@@ -67,7 +79,16 @@ export class WPILibWebSocketServer extends EventEmitter {
         this._wss.on("connection", socket => {
             this._activeSocket = socket;
             socket.on("message", msg => {
-                console.log(`Message Received: ${msg}`);
+                try {
+                    const msgObj = JSON.parse(msg.toString());
+                    if (isValidWpilibWsMsg(msgObj)) {
+                        this._handleWpilibWsMsg(msgObj as IWpilibWsMsg);
+                    }
+                }
+                catch (e) {
+                    console.log(`Problem parsing JSON`);
+                }
+
             });
 
             socket.on("close", (code, reason) => {
@@ -76,4 +97,5 @@ export class WPILibWebSocketServer extends EventEmitter {
             });
         });
     }
+
 }

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/bb-frc-workshops/wpilib-ws-server#readme",
   "dependencies": {
+    "strict-event-emitter-types": "^2.0.0",
     "ws": "^7.3.1"
   },
   "devDependencies": {
