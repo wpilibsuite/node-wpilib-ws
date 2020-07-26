@@ -4,7 +4,7 @@ import net from "net";
 import url from "url";
 
 import WPILibWSInterface from "./protocol/wpilib-ws-interface";
-import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, isValidWpilibWsMsg, IWpilibWsMsg } from "./protocol/wpilib-ws-proto-messages";
+import { isValidWpilibWsMsg, IWpilibWsMsg } from "./protocol/wpilib-ws-proto-messages";
 
 
 export interface WPILibWSServerConfig {
