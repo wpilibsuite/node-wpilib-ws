@@ -1,6 +1,6 @@
 {
   "name": "node-wpilib-ws",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "WebSocket client/server interfacing with WPILib",
   "main": "dist/package.js",
   "typings": "dist/package.d.ts",
