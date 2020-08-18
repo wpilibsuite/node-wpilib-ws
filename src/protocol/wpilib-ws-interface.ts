@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { WpilibWsEventEmitter } from "./wpilib-ws-proto-eventemitter";
-import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, IWpilibWsMsg, DIODeviceType, AIDeviceType, AODeviceType, EncoderDeviceType, PWMDeviceType, RelayDeviceType } from "./wpilib-ws-proto-messages";
+import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, IWpilibWsMsg, DIODeviceType, AIDeviceType, AODeviceType, EncoderDeviceType, PWMDeviceType, RelayDeviceType, DriverStationPayload, DriverStationDeviceType, RoboRioPayload, RoboRioDeviceType, JoystickPayload, JoystickDeviceType } from "./wpilib-ws-proto-messages";
 
 export default abstract class WPILibWSInterface extends (EventEmitter as new () => WpilibWsEventEmitter) {
     public dioUpdateToWpilib(channel: number, payload: DIOPayload): void {
@@ -63,12 +63,42 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
         this._sendWpilibUpdateMessage(msg);
     }
 
+    public driverStationUpdateToWpilib(payload: DriverStationPayload): void {
+        const msg: IWpilibWsMsg = {
+            type: DriverStationDeviceType,
+            device: "",
+            data: payload
+        };
+
+        this._sendWpilibUpdateMessage(msg);
+    }
+
+    public roboRioUpdateToWpilib(payload: RoboRioPayload): void {
+        const msg: IWpilibWsMsg = {
+            type: RoboRioDeviceType,
+            device: "",
+            data: payload
+        };
+
+        this._sendWpilibUpdateMessage(msg);
+    }
+
+    public joystickUpdateToWpilib(joystickNum: number, payload: JoystickPayload): void {
+        const msg: IWpilibWsMsg = {
+            type: JoystickDeviceType,
+            device: joystickNum.toString(),
+            data: payload
+        };
+
+        this._sendWpilibUpdateMessage(msg);
+    }
+
 
     protected abstract _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void;
 
     /**
      * Utility method that will emit appropriate events base on data
-     * @param msg 
+     * @param msg
      */
     protected _handleWpilibWsMsg(msg: IWpilibWsMsg): void {
         const channel = Number.parseInt(msg.device);
@@ -104,7 +134,17 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
                     this.emit("relayEvent", channel, msg.data as RelayPayload);
                 }
                 break;
-            // TODO Implement the rest
+            case DriverStationDeviceType:
+                this.emit("driverStationEvent", msg.data as DriverStationPayload);
+                break;
+            case RoboRioDeviceType:
+                this.emit("roboRioEvent", msg.data as RoboRioPayload);
+                break;
+            case JoystickDeviceType:
+                if (!Number.isNaN(channel)) {
+                    this.emit("joystickEvent", channel, msg.data as JoystickPayload);
+                }
+                break;
         }
     }
 }

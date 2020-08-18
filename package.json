@@ -1,7 +1,7 @@
 {
-  "name": "wpilib-ws-server",
+  "name": "node-wpilib-ws",
   "version": "1.0.0",
-  "description": "WebSocket server for interfacing with non-FRC hardware",
+  "description": "WebSocket client/server interfacing with WPILib",
   "main": "package.js",
   "scripts": {
     "build": "tsc",
