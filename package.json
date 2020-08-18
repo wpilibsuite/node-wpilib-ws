@@ -2,7 +2,8 @@
   "name": "node-wpilib-ws",
   "version": "0.0.1",
   "description": "WebSocket client/server interfacing with WPILib",
-  "main": "package.js",
+  "main": "dist/package.js",
+  "typings": "dist/package.d.ts",
   "scripts": {
     "build": "tsc",
     "start": "node ./dist/apps/debug-server.js"
