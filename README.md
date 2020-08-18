@@ -1,2 +1,2 @@
-# wpilib-ws-server
-WebSocket server for interfacing with non-FRC hardware
+# node-wpilib-ws
+WebSocket client/server implementations for interfacing with WPILib
