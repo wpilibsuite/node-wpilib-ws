@@ -6,7 +6,8 @@
   "typings": "dist/package.d.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/apps/debug-server.js"
+    "prepare": "npm run build",
+    "demo-server": "node ./dist/apps/debug-server.js"
   },
   "repository": {
     "type": "git",
@@ -26,5 +27,8 @@
   "devDependencies": {
     "@types/ws": "^7.2.6",
     "typescript": "^3.9.7"
-  }
+  },
+  "files": [
+    "dist/**/*"
+  ]
 }
