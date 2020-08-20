@@ -3,6 +3,26 @@ import { WpilibWsEventEmitter } from "./wpilib-ws-proto-eventemitter";
 import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, IWpilibWsMsg, DIODeviceType, AIDeviceType, AODeviceType, EncoderDeviceType, PWMDeviceType, RelayDeviceType, DriverStationPayload, DriverStationDeviceType, RoboRioPayload, RoboRioDeviceType, JoystickPayload, JoystickDeviceType } from "./wpilib-ws-proto-messages";
 
 export default abstract class WPILibWSInterface extends (EventEmitter as new () => WpilibWsEventEmitter) {
+    protected _ready: boolean;
+
+    public isReady(): boolean {
+        return this._ready;
+    }
+
+    public isReadyP(): Promise<void> {
+        if (this._ready) {
+            return Promise.resolve();
+        }
+
+        return new Promise(resolve => {
+            this.once("ready", () => {
+                resolve();
+            });
+        });
+    }
+
+    public abstract start(): void;
+
     public dioUpdateToWpilib(channel: number, payload: DIOPayload): void {
         const msg: IWpilibWsMsg = {
             type: DIODeviceType,

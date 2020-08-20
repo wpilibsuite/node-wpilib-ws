@@ -38,13 +38,19 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
         this._hookupServerEvents();
 
         if (config?.startOnCreate) {
-            this.startServer();
+            this.start();
         }
     }
 
-    public startServer() {
-        this._httpServer.listen(this._port);
-        this.emit("ready");
+    public start() {
+        if (this._httpServer.listening) {
+            return;
+        }
+
+        this._httpServer.listen(this._port, () => {
+            this._ready = true;
+            this.emit("ready");
+        });
     }
 
     protected _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void {

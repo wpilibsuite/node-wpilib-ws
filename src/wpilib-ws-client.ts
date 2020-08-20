@@ -15,7 +15,6 @@ export default class WPILibWebSocketClient extends WPILibWSInterface {
     private _hostname: string = "localhost";
     private _port: number = 8080;
     private _ws: WebSocket;
-    private _ready: boolean = false;
 
     constructor(config?: WPILibWSClientConfig) {
         super();
@@ -30,11 +29,11 @@ export default class WPILibWebSocketClient extends WPILibWSInterface {
         }
 
         if (config?.connectOnCreate) {
-            this.connect();
+            this.start();
         }
     }
 
-    public connect() {
+    public start() {
         if (this._ready) {
             return;
         }

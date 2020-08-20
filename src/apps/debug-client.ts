@@ -1,7 +1,7 @@
 import { WPILibWebSocketClient, WPILibWSMessages } from "../package";
 
 const wsc = new WPILibWebSocketClient();
-wsc.connect();
+wsc.start();
 
 wsc.on("ready", () => {
     console.log("Ready!");
