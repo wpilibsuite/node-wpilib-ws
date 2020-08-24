@@ -30,6 +30,8 @@ export interface AOPayload {
 export const EncoderDeviceType: string = "Encoder";
 export interface EncoderPayload {
     "<init"?: boolean;
+    "<channel_a"?: number;
+    "<channel_b"?: number;
     ">count"?: number;
     ">period"?: number;
     "<reset"?: boolean;
