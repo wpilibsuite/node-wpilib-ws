@@ -85,6 +85,8 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
 
         this._wss.on("connection", socket => {
             this._activeSocket = socket;
+            console.log("Successfully connected");
+            this.emit("openConnection"); // For robot initialization
             socket.on("message", msg => {
                 try {
                     const msgObj = JSON.parse(msg.toString());
@@ -101,6 +103,7 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
             socket.on("close", (code, reason) => {
                 console.log(`Socket closed (${code}): ${reason}`);
                 this._activeSocket = null;
+                this.emit("closeConnection"); // For robot cleanup
             });
         });
     }

@@ -5,6 +5,8 @@ import { EventEmitter } from "events";
 interface BaseEvents {
     ready: void;
     error: (code: number, reason: string) => void;
+    openConnection: void;
+    closeConnection: void;
 }
 
 interface WpilibWsProtocolEvents extends BaseEvents {
