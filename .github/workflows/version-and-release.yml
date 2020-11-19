@@ -7,9 +7,6 @@ on:
         description: 'Semantic Version Bump Type (major minor patch)'
         required: true
 
-env:
-  node_version: 14
-
 jobs:
   version_and_release:
     runs-on: ubuntu-latest
