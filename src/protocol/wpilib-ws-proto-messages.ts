@@ -96,8 +96,14 @@ export interface JoystickPayload {
     ">axes"?: number[];
 }
 
+export const SimDevicesType = "SimDevices";
+export interface SimDevicesPayload {
+    [key: string]: any
+}
+// SimDevices payload can be variable
+
 // This should be an OR of all the payload types
-type WpilibWsMsgPayload = DIOPayload | AIPayload | AOPayload | EncoderPayload | PWMPayload | RelayPayload | DriverStationPayload | RoboRioPayload | JoystickPayload;
+type WpilibWsMsgPayload = DIOPayload | AIPayload | AOPayload | EncoderPayload | PWMPayload | RelayPayload | DriverStationPayload | RoboRioPayload | JoystickPayload | SimDevicesPayload;
 
 // This is the envelope type
 export interface IWpilibWsMsg {

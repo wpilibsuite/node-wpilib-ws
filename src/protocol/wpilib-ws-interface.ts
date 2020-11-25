@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { WpilibWsEventEmitter } from "./wpilib-ws-proto-eventemitter";
-import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, IWpilibWsMsg, DIODeviceType, AIDeviceType, AODeviceType, EncoderDeviceType, PWMDeviceType, RelayDeviceType, DriverStationPayload, DriverStationDeviceType, RoboRioPayload, RoboRioDeviceType, JoystickPayload, JoystickDeviceType } from "./wpilib-ws-proto-messages";
+import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, IWpilibWsMsg, DIODeviceType, AIDeviceType, AODeviceType, EncoderDeviceType, PWMDeviceType, RelayDeviceType, DriverStationPayload, DriverStationDeviceType, RoboRioPayload, RoboRioDeviceType, JoystickPayload, JoystickDeviceType, SimDevicesType, SimDevicesPayload } from "./wpilib-ws-proto-messages";
 
 export default abstract class WPILibWSInterface extends (EventEmitter as new () => WpilibWsEventEmitter) {
     protected _ready: boolean;
@@ -113,6 +113,21 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
         this._sendWpilibUpdateMessage(msg);
     }
 
+    public simDevicesUpdateToWpilib(deviceName: string, deviceChannel: number | null, payload: SimDevicesPayload): void {
+        let deviceIdent: string = deviceName;
+        if (deviceChannel !== null) {
+            deviceIdent += `[${deviceChannel}]`;
+        }
+
+        const msg: IWpilibWsMsg = {
+            type: SimDevicesType,
+            device: deviceIdent,
+            data: payload
+        };
+
+        this._sendWpilibUpdateMessage(msg);
+    }
+
 
     protected abstract _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void;
 
@@ -164,6 +179,23 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
                 if (!Number.isNaN(channel)) {
                     this.emit("joystickEvent", channel, msg.data as JoystickPayload);
                 }
+                break;
+            case SimDevicesType:
+                // SimDevices "device" name could be of the form `deviceName` or `deviceName[channel]`
+                const indexRegex = /\[([0-9]+)\]/;
+                const deviceIdxResult = indexRegex.exec(msg.device);
+                let deviceName: string = "";
+                let deviceChannel: number | null = null;
+
+                if (deviceIdxResult !== null) {
+                    deviceChannel = parseInt(deviceIdxResult[1], 10);
+                    deviceName = msg.device.substr(0, deviceIdxResult.index);
+                }
+                else {
+                    deviceName = msg.device;
+                }
+                this.emit("simDevicesEvent", deviceName, deviceChannel, msg.data as SimDevicesPayload);
+
                 break;
         }
     }
