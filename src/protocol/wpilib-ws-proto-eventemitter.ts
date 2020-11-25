@@ -1,5 +1,5 @@
 import StrictEventEmitter from "strict-event-emitter-types";
-import { DIOPayload, AIPayload, AOPayload, EncoderPayload, PWMPayload, RelayPayload, DriverStationPayload, RoboRioPayload, JoystickPayload } from "./wpilib-ws-proto-messages";
+import { DIOPayload, AIPayload, AOPayload, EncoderPayload, PWMPayload, RelayPayload, DriverStationPayload, RoboRioPayload, JoystickPayload, SimDevicesPayload } from "./wpilib-ws-proto-messages";
 import { EventEmitter } from "events";
 
 interface BaseEvents {
@@ -19,6 +19,7 @@ interface WpilibWsProtocolEvents extends BaseEvents {
     driverStationEvent: (payload: DriverStationPayload) => void;
     roboRioEvent: (payload: RoboRioPayload) => void;
     joystickEvent: (channel: number, payload: JoystickPayload) => void;
+    simDevicesEvent: (deviceName: string, deviceChannel: number | null, payload: SimDevicesPayload) => void;
 }
 
 export type WpilibWsEventEmitter = StrictEventEmitter<EventEmitter, WpilibWsProtocolEvents>;
