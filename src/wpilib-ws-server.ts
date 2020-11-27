@@ -53,6 +53,14 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
         });
     }
 
+    public stop() {
+        if (!this._httpServer.listening) {
+            return;
+        }
+
+        this._httpServer.close();
+    }
+
     protected _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void {
         if (this._activeSocket) {
             this._activeSocket.send(JSON.stringify(msg));
