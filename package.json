@@ -10,7 +10,8 @@
     "version-minor": "npm version minor -m \"Update version to %s\"",
     "version-patch": "npm version patch -m \"Update version to %s\"",
     "postversion": "git push && git push --tags",
-    "demo-server": "node ./dist/apps/debug-server.js"
+    "demo-server": "node ./dist/apps/debug-server.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,10 @@
     "ws": "^7.3.1"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.15",
     "@types/ws": "^7.2.6",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.4.4",
     "typescript": "^3.9.7"
   },
   "files": [

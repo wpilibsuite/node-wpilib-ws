@@ -24,7 +24,7 @@ export interface AIPayload {
 export const AODeviceType: string = "AO";
 export interface AOPayload {
     "<init"?: boolean;
-    "<votage"?: number;
+    "<voltage"?: number;
 }
 
 export const EncoderDeviceType: string = "Encoder";
