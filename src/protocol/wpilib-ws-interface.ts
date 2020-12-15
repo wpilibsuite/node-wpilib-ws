@@ -4,6 +4,15 @@ import { DIOPayload, AOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayl
 
 export default abstract class WPILibWSInterface extends (EventEmitter as new () => WpilibWsEventEmitter) {
     protected _ready: boolean;
+    protected _verbose: boolean = false;
+
+    public set verboseMode(mode: boolean) {
+        this._verbose = mode;
+    }
+
+    public get verboseMode(): boolean {
+        return this._verbose;
+    }
 
     public isReady(): boolean {
         return this._ready;
@@ -137,6 +146,10 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
      */
     protected _handleWpilibWsMsg(msg: IWpilibWsMsg): void {
         const channel = Number.parseInt(msg.device);
+
+        if(this._verbose) {
+            console.log("WS MSG (from Robot Code): ", msg);
+        }
 
         switch (msg.type) {
             case DIODeviceType:

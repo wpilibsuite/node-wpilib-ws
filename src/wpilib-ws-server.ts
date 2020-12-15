@@ -11,11 +11,12 @@ export interface WPILibWSServerConfig {
     port?: number;
     uri?: string;
     startOnCreate?: boolean;
+    verbose?: boolean;
 }
 
 export default class WPILibWebSocketServer extends WPILibWSInterface {
     private _uri: string = "/wpilibws";
-    private _port: number = 8080;
+    private _port: number = 3300;
     private _httpServer: http.Server;
     private _wss: WebSocket.Server;
     private _activeSocket: WebSocket | null = null;
@@ -27,6 +28,10 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
         }
         if (config?.uri) {
             this._uri = config.uri;
+        }
+
+        if (config?.verbose) {
+            this.verboseMode = config.verbose;
         }
 
         this._httpServer = http.createServer();
@@ -63,6 +68,9 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
 
     protected _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void {
         if (this._activeSocket) {
+            if (this._verbose) {
+                console.log("WS MSG (to Robot Code): ", msg);
+            }
             this._activeSocket.send(JSON.stringify(msg));
         }
     }
@@ -100,6 +108,9 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
                     const msgObj = JSON.parse(msg.toString());
                     if (isValidWpilibWsMsg(msgObj)) {
                         this._handleWpilibWsMsg(msgObj as IWpilibWsMsg);
+                    }
+                    else if (this._verbose) {
+                        console.log("Invalid WS message: ", msg);
                     }
                 }
                 catch (e) {
