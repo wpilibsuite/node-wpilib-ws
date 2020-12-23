@@ -484,13 +484,6 @@
             "payload": {
                 "isDynamic": true
             }
-        },
-        {
-            "messageType": "SimDevices",
-            "description": "SimDevice (deprecated)",
-            "payload": {
-                "isDynamic": true
-            }
         }
 
     ]
