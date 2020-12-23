@@ -1,0 +1,497 @@
+{
+    "$schema": "./protocol-schema.json",
+    "messages": [
+        {
+            "messageType": "Accel",
+            "description": "A 3-axis accelerometer",
+            "payload": [
+                {
+                    "fieldName": "init",
+                    "fieldDescription": "If the accelerometer is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "range",
+                    "fieldDescription": "Desired range in Gs",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "x",
+                    "fieldDescription": "X-axis acceleration in Gs",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "y",
+                    "fieldDescription": "Y-axis acceleration in Gs",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "z",
+                    "fieldDescription": "Z-axis acceleration in Gs",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "AI",
+            "description": "Analog Input",
+            "payload": [
+                {
+                    "fieldName": "init",
+                    "fieldDescription": "If the analog input is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "voltage",
+                    "fieldDescription": "Input voltage",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "DIO",
+            "description": "Digital IO",
+            "payload": [
+                {
+                    "fieldName": "init",
+                    "fieldDescription": "If the DIO is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "input",
+                    "fieldDescription": "True if input, false if output",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "value",
+                    "fieldDescription": "Input or output state",
+                    "fieldDirection": "bidir",
+                    "dataType": "boolean"
+                }
+            ]
+        },
+        {
+            "messageType": "dPWM",
+            "description": "Duty Cycle Output",
+            "payload": [
+                {
+                    "fieldName": "init",
+                    "fieldDescription": "If dPWM output is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "duty_cycle",
+                    "fieldDescription": "Duty cycle % (0.0 to 1.0)",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "dio_pin",
+                    "fieldDescription": "DIO Pin number",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "DriverStation",
+            "description": "Driver Station",
+            "payload": [
+                {
+                    "fieldName": "new_data",
+                    "fieldDescription": "One shot. If set to true in a message, notifies robot code that new DS and joystick data is available",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "enabled",
+                    "fieldDescription": "True to enable the robot program",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "autonomous",
+                    "fieldDescription": "True for autonomous mode; false for teleop",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "test",
+                    "fieldDescription": "True for test mode; false for other modes",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "estop",
+                    "fieldDescription": "True to emergency stop (no motor outputs)",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "fms",
+                    "fieldDescription": "True if the DS is connected to a Field Management System (FMS)",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "ds",
+                    "fieldDescription": "True if a DS application is connected",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "station",
+                    "fieldDescription": "Station color and number; supported values are 'red1', 'red2, 'red3', 'blue1', 'blue2', 'blue3'",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "string"
+                },
+                {
+                    "fieldName": "match_time",
+                    "fieldDescription": "Match time countdown, in seconds, for each match period (e.g. for 15 second period, starts at 15 and counts down to 0). If not in a match, -1",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "game_data",
+                    "fieldDescription": "Game-specific data; arbitrary string contents",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "DutyCycle",
+            "description": "Duty Cycle inputs. Commonly used for absolute encoders. The position is accumulated over multiple rotations.",
+            "payload": [
+                {
+                    "fieldName": "connected",
+                    "fieldDescription": "True if the encoder is connected",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "position",
+                    "fieldDescription": "The position in rotations",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "Encoder",
+            "description": "Relative encoder",
+            "payload": [
+                {
+                    "fieldName": "init",
+                    "fieldDescription": "If encoder is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "channel_a",
+                    "fieldDescription": "Digital channel for 'A' phase",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "channel_b",
+                    "fieldDescription": "Digital channel for 'B' phase",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "samples_to_avg",
+                    "fieldDescription": "Number of samples to average for period measurement",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "count",
+                    "fieldDescription": "Accumulated count (pulses)",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "period",
+                    "fieldDescription": "Period between pulses in seconds",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "Gyro",
+            "description": "A single axis or 3-axis gyro. Single axis gyros only use the X angle parameter",
+            "payload": [
+                {
+                    "fieldName": "init",
+                    "fieldDescription": "If gyro is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "range",
+                    "fieldDescription": "Gyro range in degrees/second (optional)",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "connected",
+                    "fieldDescription": "True if the gyro is connected",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "angle_x",
+                    "fieldDescription": "X-axis angle in degrees",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "angle_y",
+                    "fieldDescription": "Y-axis angle in degrees",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "angle_z",
+                    "fieldDescription": "Z-axis angle in degrees",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "rate_x",
+                    "fieldDescription": "X-axis angular rate of change in degrees/second",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "rate_y",
+                    "fieldDescription": "Y-axis angular rate of change in degrees/second",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "rate_z",
+                    "fieldDescription": "Z-axis angular rate of change in degrees/second",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "Joystick",
+            "description": "Joystick data is an input to the robot program and should be updated for each input joystick on a periodic basis.",
+            "payload": [
+                {
+                    "fieldName": "axes",
+                    "fieldDescription": "One array element per axis; value is -1 to 1 range",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number",
+                    "isArray": true
+                },
+                {
+                    "fieldName": "povs",
+                    "fieldDescription": "One array element per POV; value is angle in degrees of the POV (e.g. 0, 90, 315) if pressed, or -1 if the POV is not pressed.",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number",
+                    "isArray": true
+                },
+                {
+                    "fieldName": "buttons",
+                    "fieldDescription": "One array element per button; true if button is pressed, false if button is released",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean",
+                    "isArray": true
+                },
+                {
+                    "fieldName": "rumble_left",
+                    "fieldDescription": "Left rumble, value is 0-1 range",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "rumble_right",
+                    "fieldDescription": "Right rumble, value is 0-1 range",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "PWM",
+            "description": "PWMs may be used to control either speed controlelrs of servos. Typically only one of either 'speed' (for a speed controller) or 'position' (for a servo) is used for a given PWM",
+            "payload": [
+                {
+                    "fieldName": "init",
+                    "fieldDescription": "If PWM is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "speed",
+                    "fieldDescription": "Speed, -1.0 to 1.0 range",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "position",
+                    "fieldDescription": "Servo position, 0.0 to 1.0 range",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "Relay",
+            "description": "Relay",
+            "payload": [
+                {
+                    "fieldName": "init_fwd",
+                    "fieldDescription": "If relay forward direction is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "init_rev",
+                    "fieldDescription": "If relay reverse direction is initialized in robot code",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "fwd",
+                    "fieldDescription": "True if forward direction is enabled",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "rev",
+                    "fieldDescription": "True if reverse direction is enabled",
+                    "fieldDirection": "from_robot_code",
+                    "dataType": "boolean"
+                }
+            ]
+        },
+        {
+            "messageType": "RoboRIO",
+            "description": "RoboRIO message",
+            "payload": [
+                {
+                    "fieldName": "fpga_button",
+                    "fieldDescription": "FPGA button state",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "vin_voltage",
+                    "fieldDescription": "Vin rail voltage",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "vin_current",
+                    "fieldDescription": "Vin rail current",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "6v_voltage",
+                    "fieldDescription": "6V rail voltage",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "6v_current",
+                    "fieldDescription": "6V rail current",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "6v_active",
+                    "fieldDescription": "True if 6V rail active, false if inactive",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "6v_faults",
+                    "fieldDescription": "Number of faults on 6V rail",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "5v_voltage",
+                    "fieldDescription": "5V rail voltage",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "5v_current",
+                    "fieldDescription": "5V rail current",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "5v_active",
+                    "fieldDescription": "True if 5V rail active, false if inactive",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "5v_faults",
+                    "fieldDescription": "Number of faults on 5V rail",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "3v3_voltage",
+                    "fieldDescription": "3.3V rail voltage",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "3v3_current",
+                    "fieldDescription": "3.3V rail current",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                },
+                {
+                    "fieldName": "3v3_active",
+                    "fieldDescription": "True if 3,3V rail active, false if inactive",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "boolean"
+                },
+                {
+                    "fieldName": "3v3_faults",
+                    "fieldDescription": "Number of faults on 3.3V rail",
+                    "fieldDirection": "to_robot_code",
+                    "dataType": "number"
+                }
+            ]
+        },
+        {
+            "messageType": "SimDevice",
+            "description": "SimDevice",
+            "payload": {
+                "isDynamic": true
+            }
+        },
+        {
+            "messageType": "SimDevices",
+            "description": "SimDevice (deprecated)",
+            "payload": {
+                "isDynamic": true
+            }
+        }
+
+    ]
+}

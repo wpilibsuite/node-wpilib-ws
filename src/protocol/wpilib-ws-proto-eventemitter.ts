@@ -1,5 +1,5 @@
 import StrictEventEmitter from "strict-event-emitter-types";
-import { DIOPayload, AIPayload, AOPayload, EncoderPayload, PWMPayload, RelayPayload, DriverStationPayload, RoboRioPayload, JoystickPayload, SimDevicesPayload } from "./wpilib-ws-proto-messages";
+import { DIOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, DriverStationPayload, RoboRIOPayload, JoystickPayload, SimDevicesPayload, AccelPayload, dPWMPayload, DutyCyclePayload, GyroPayload, SimDevicePayload } from "./wpilib-ws-proto-messages";
 import { EventEmitter } from "events";
 
 interface BaseEvents {
@@ -10,15 +10,21 @@ interface BaseEvents {
 }
 
 interface WpilibWsProtocolEvents extends BaseEvents {
-    dioEvent: (channel: number, payload: DIOPayload) => void;
+    accelEvent: (deviceName: string, deviceChannel: number | null, payload: AccelPayload) => void;
     analogInEvent: (channel: number, payload: AIPayload) => void;
-    analogOutEvent: (channel: number, payload: AOPayload) => void;
+    dioEvent: (channel: number, payload: DIOPayload) => void;
+    dpwmEvent: (channel: number, payload: dPWMPayload) => void;
+    driverStationEvent: (payload: DriverStationPayload) => void;
+    dutyCycleEvent: (channel: number, payload: DutyCyclePayload) => void;
     encoderEvent: (channel: number, payload: EncoderPayload) => void;
+    gyroEvent: (deviceName: string, deviceChannel: number | null, payload: GyroPayload) => void;
+    joystickEvent: (channel: number, payload: JoystickPayload) => void;
     pwmEvent: (channel: number, payload: PWMPayload) => void;
     relayEvent: (channel: number, payload: RelayPayload) => void;
-    driverStationEvent: (payload: DriverStationPayload) => void;
-    roboRioEvent: (payload: RoboRioPayload) => void;
-    joystickEvent: (channel: number, payload: JoystickPayload) => void;
+    roboRioEvent: (payload: RoboRIOPayload) => void;
+    simDeviceEvent: (deviceName: string, deviceChannel: number | null, payload: SimDevicePayload) => void;
+
+    // Deprecated
     simDevicesEvent: (deviceName: string, deviceChannel: number | null, payload: SimDevicesPayload) => void;
 }
 
