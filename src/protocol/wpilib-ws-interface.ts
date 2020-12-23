@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { WpilibWsEventEmitter } from "./wpilib-ws-proto-eventemitter";
-import { DIOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, IWpilibWsMsg, DIODeviceType, AIDeviceType, EncoderDeviceType, PWMDeviceType, RelayDeviceType, DriverStationPayload, DriverStationDeviceType, RoboRIOPayload, RoboRIODeviceType, JoystickPayload, JoystickDeviceType, SimDevicesType, SimDevicesPayload, SimDeviceType, SimDevicePayload, AccelDeviceType, AccelPayload, dPWMDeviceType, dPWMPayload, DutyCycleDeviceType, DutyCyclePayload, GyroDeviceType, GyroPayload } from "./wpilib-ws-proto-messages";
+import { DIOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, IWpilibWsMsg, DIODeviceType, AIDeviceType, EncoderDeviceType, PWMDeviceType, RelayDeviceType, DriverStationPayload, DriverStationDeviceType, RoboRIOPayload, RoboRIODeviceType, JoystickPayload, JoystickDeviceType, SimDeviceType, SimDevicePayload, AccelDeviceType, AccelPayload, dPWMDeviceType, dPWMPayload, DutyCycleDeviceType, DutyCyclePayload, GyroDeviceType, GyroPayload } from "./wpilib-ws-proto-messages";
 
 export default abstract class WPILibWSInterface extends (EventEmitter as new () => WpilibWsEventEmitter) {
     protected _ready: boolean;
@@ -154,7 +154,7 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
         this._sendWpilibUpdateMessage(msg);
     }
 
-    public simDeviceUpdateToWpilib(deviceName: string, deviceChannel: number | null, payload: SimDevicesPayload): void {
+    public simDeviceUpdateToWpilib(deviceName: string, deviceChannel: number | null, payload: SimDevicePayload): void {
         let deviceIdent: string = deviceName;
         if (deviceChannel !== null) {
             deviceIdent += `[${deviceChannel}]`;
@@ -162,22 +162,6 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
 
         const msg: IWpilibWsMsg = {
             type: SimDeviceType,
-            device: deviceIdent,
-            data: payload
-        };
-
-        this._sendWpilibUpdateMessage(msg);
-    }
-
-    // Deprecate
-    public simDevicesUpdateToWpilib(deviceName: string, deviceChannel: number | null, payload: SimDevicesPayload): void {
-        let deviceIdent: string = deviceName;
-        if (deviceChannel !== null) {
-            deviceIdent += `[${deviceChannel}]`;
-        }
-
-        const msg: IWpilibWsMsg = {
-            type: SimDevicesType,
             device: deviceIdent,
             data: payload
         };
@@ -304,25 +288,6 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
                     deviceName = msg.device;
                 }
                 this.emit("simDeviceEvent", deviceName, deviceChannel, msg.data as SimDevicePayload);
-
-            } break;
-
-            // Deprecated
-            case SimDevicesType: {
-                // SimDevices "device" name could be of the form `deviceName` or `deviceName[channel]`
-                const indexRegex = /\[([0-9]+)\]/;
-                const deviceIdxResult = indexRegex.exec(msg.device);
-                let deviceName: string = "";
-                let deviceChannel: number | null = null;
-
-                if (deviceIdxResult !== null) {
-                    deviceChannel = parseInt(deviceIdxResult[1], 10);
-                    deviceName = msg.device.substr(0, deviceIdxResult.index);
-                }
-                else {
-                    deviceName = msg.device;
-                }
-                this.emit("simDevicesEvent", deviceName, deviceChannel, msg.data as SimDevicesPayload);
 
             } break;
         }
