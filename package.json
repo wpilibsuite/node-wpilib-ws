@@ -11,7 +11,8 @@
     "version-patch": "npm version patch -m \"Update version to %s\"",
     "postversion": "git push && git push --tags",
     "demo-server": "node ./dist/apps/debug-server.js",
-    "test": "jest"
+    "test": "jest",
+    "gen-protocol": "node ./generate-protocol.js"
   },
   "repository": {
     "type": "git",

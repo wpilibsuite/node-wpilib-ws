@@ -1,4 +1,4 @@
-import { AIDeviceType, AODeviceType, DIODeviceType, EncoderDeviceType, IWpilibWsMsg } from "../protocol/wpilib-ws-proto-messages";
+import { AIDeviceType, DIODeviceType, EncoderDeviceType, IWpilibWsMsg } from "../protocol/wpilib-ws-proto-messages";
 import WPILibWSInterface from "../protocol/wpilib-ws-interface";
 
 class MockInterface extends WPILibWSInterface {
@@ -52,22 +52,6 @@ describe("WPILibWSInterface - Incoming Messages", () => {
             device: "1",
             data: {
                 "<init": true
-            }
-        });
-    });
-
-    it("should emit an analogOutEvent when given an AO message", (done) => {
-        testInterface.once("analogOutEvent", (channel, payload) => {
-            expect(channel).toBe(1);
-            expect(payload["<voltage"]).toEqual(2.0);
-            done();
-        });
-
-        testInterface.simulateIncomingMessage({
-            type: AODeviceType,
-            device: "1",
-            data: {
-                "<voltage": 2.0
             }
         });
     });

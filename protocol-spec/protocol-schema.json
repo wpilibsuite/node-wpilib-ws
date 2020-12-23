@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+
+    "definitions": {
+        "payloadField": {
+            "type": "object",
+            "properties": {
+                "fieldName": { "type": "string" },
+                "fieldDirection": { "enum": ["to_robot_code", "from_robot_code", "bidir"] },
+                "dataType": { "enum": ["boolean", "number", "string"] },
+                "isArray": { "type": "boolean" },
+                "fieldDescription": { "type": "string" }
+            },
+            "required": ["fieldName", "fieldDirection", "dataType"]
+        },
+        "messageType": {
+            "type": "object",
+            "properties": {
+                "messageType": { "type": "string" },
+                "description": { "type": "string" },
+                "payload": {
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/payloadField" },
+                            "default": []
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "isDynamic": { "type": "boolean" }
+                            }
+                        }
+                    ]
+                }
+            },
+            "required": ["messageType", "payload"]
+        }
+    },
+
+    "type": "object",
+    "properties": {
+        "messages": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/messageType" },
+            "default": []
+        }
+    }
+}
