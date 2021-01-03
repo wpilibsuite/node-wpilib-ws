@@ -1,17 +1,23 @@
-import { AIDeviceType, DIODeviceType, EncoderDeviceType, IWpilibWsMsg } from "../protocol/wpilib-ws-proto-messages";
+import { AIDeviceType, AIPayload, DIODeviceType, DIOPayload, EncoderDeviceType, IWpilibWsMsg } from "../protocol/wpilib-ws-proto-messages";
 import WPILibWSInterface from "../protocol/wpilib-ws-interface";
 
 class MockInterface extends WPILibWSInterface {
+    protected _lastOutboundMsg: IWpilibWsMsg;
+
     public start(): void {
         this.emit("ready");
     }
 
     protected _sendWpilibUpdateMessage(msg: IWpilibWsMsg): void {
-
+        this._lastOutboundMsg = msg;
     }
 
     public simulateIncomingMessage(msg: IWpilibWsMsg) {
         this._handleWpilibWsMsg(msg);
+    }
+
+    public getLastOutboundMessage(): IWpilibWsMsg {
+        return this._lastOutboundMsg;
     }
 }
 
@@ -72,5 +78,51 @@ describe("WPILibWSInterface - Incoming Messages", () => {
                 "<channel_b": 5
             }
         });
+    });
+});
+
+describe("WPILibWSInterface - Outgoing Messages", () => {
+    let testInterface: MockInterface;
+
+    beforeEach(() => {
+        testInterface = new MockInterface();
+        testInterface.start();
+    });
+
+    it("should send the appropriate DIO wire message", () => {
+        const expectedChannel: number = 4;
+        const expectedPayload: DIOPayload = {
+            "<>value": true
+        };
+
+        testInterface.dioUpdateToWpilib(expectedChannel, expectedPayload);
+
+        const lastMsg = testInterface.getLastOutboundMessage();
+        expect(lastMsg.type).toBe(DIODeviceType);
+        expect(lastMsg.device).toBe(expectedChannel.toString());
+        expect(lastMsg.data).not.toBeUndefined();
+
+        const msgPayload: DIOPayload = (lastMsg.data as DIOPayload);
+        expect(msgPayload["<>value"]).not.toBeUndefined();
+        expect(msgPayload["<>value"]).toBe(true);
+    });
+
+    it("should send the appropriate Analog In wire message", () => {
+        const expectedChannel: number = 2;
+        const expectedVoltage = 2.5678;
+        const expectedPayload: AIPayload = {
+            ">voltage": expectedVoltage
+        };
+
+        testInterface.analogInUpdateToWpilib(expectedChannel, expectedPayload);
+
+        const lastMsg = testInterface.getLastOutboundMessage();
+        expect(lastMsg.type).toBe(AIDeviceType);
+        expect(lastMsg.device).toBe(expectedChannel.toString());
+        expect(lastMsg.data).not.toBe(undefined);
+
+        const msgPayload: AIPayload = (lastMsg.data as AIPayload);
+        expect(msgPayload[">voltage"]).not.toBeUndefined();
+        expect(msgPayload[">voltage"]).toBeCloseTo(expectedVoltage, 5);
     });
 });
