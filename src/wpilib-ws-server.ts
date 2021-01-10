@@ -2,6 +2,7 @@ import WebSocket from "ws";
 import http from "http";
 import net from "net";
 import url from "url";
+import { Address4, Address6 } from "ip-address";
 
 import WPILibWSInterface from "./protocol/wpilib-ws-interface";
 import { isValidWpilibWsMsg, IWpilibWsMsg } from "./protocol/wpilib-ws-proto-messages";
@@ -99,10 +100,23 @@ export default class WPILibWebSocketServer extends WPILibWSInterface {
             }
         });
 
-        this._wss.on("connection", socket => {
+        this._wss.on("connection", (socket, request) => {
             this._activeSocket = socket;
             console.log("Successfully connected");
-            this.emit("openConnection"); // For robot initialization
+
+            // Pass the remote connection information up the chain
+            const remoteAddr = request.connection.remoteAddress;
+            let ipv4String: string = "";
+
+            if (Address4.isValid(remoteAddr)) {
+                ipv4String = remoteAddr;
+            }
+            else if (Address6.isValid(remoteAddr)) {
+                const addrV6 = new Address6(remoteAddr);
+                ipv4String = addrV6.to4().address;
+            }
+
+            this.emit("openConnection", { ipv4Address: ipv4String }); // For robot initialization
             socket.on("message", msg => {
                 try {
                     const msgObj = JSON.parse(msg.toString());
