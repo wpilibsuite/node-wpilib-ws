@@ -26,11 +26,13 @@
   },
   "homepage": "https://github.com/bb-frc-workshops/wpilib-ws-server#readme",
   "dependencies": {
+    "ip-address": "^7.1.0",
     "strict-event-emitter-types": "^2.0.0",
     "ws": "^7.3.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
+    "@types/jsbn": "^1.2.29",
     "@types/ws": "^7.2.6",
     "jest": "^26.6.3",
     "ts-jest": "^26.4.4",

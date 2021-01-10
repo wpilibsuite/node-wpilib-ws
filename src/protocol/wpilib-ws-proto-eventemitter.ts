@@ -1,11 +1,12 @@
 import StrictEventEmitter from "strict-event-emitter-types";
 import { DIOPayload, AIPayload, EncoderPayload, PWMPayload, RelayPayload, DriverStationPayload, RoboRIOPayload, JoystickPayload, AccelPayload, dPWMPayload, DutyCyclePayload, GyroPayload, SimDevicePayload } from "./wpilib-ws-proto-messages";
 import { EventEmitter } from "events";
+import RemoteConnectionInfo from "../remote-connection-info";
 
 interface BaseEvents {
     ready: void;
     error: (code: number, reason: string) => void;
-    openConnection: void;
+    openConnection: (remoteIpAddress?: RemoteConnectionInfo) => void;
     closeConnection: void;
 }
 
