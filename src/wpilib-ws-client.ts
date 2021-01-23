@@ -50,11 +50,13 @@ export default class WPILibWebSocketClient extends WPILibWSInterface {
             this._ready = true;
             console.log("WS Ready");
             this.emit("ready");
+            this.emit("openConnection");
         });
 
         this._ws.on("close", () => {
             this._ready = false;
             console.log("WS Closed");
+            this.emit("closeConnection");
         });
 
         this._ws.on("error", (code: number, reason: string) => {
