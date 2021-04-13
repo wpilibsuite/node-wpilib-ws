@@ -1,4 +1,4 @@
-import { AIDeviceType, AIPayload, DIODeviceType, DIOPayload, EncoderDeviceType, IWpilibWsMsg } from "../protocol/wpilib-ws-proto-messages";
+import { AIDeviceType, AIPayload, DIODeviceType, DIOPayload, EncoderDeviceType, IWpilibWsMsg, SimDeviceType } from "../protocol/wpilib-ws-proto-messages";
 import WPILibWSInterface from "../protocol/wpilib-ws-interface";
 
 class MockInterface extends WPILibWSInterface {
@@ -125,4 +125,22 @@ describe("WPILibWSInterface - Outgoing Messages", () => {
         expect(msgPayload[">voltage"]).not.toBeUndefined();
         expect(msgPayload[">voltage"]).toBeCloseTo(expectedVoltage, 5);
     });
+
+    it("should send the appropriate SimDevice message", () => {
+        testInterface.simDeviceUpdateToWpilib("SimDevice", null, null, { foo: 2 });
+        const lastMsgSingleton = testInterface.getLastOutboundMessage();
+        expect(lastMsgSingleton.type).toBe(SimDeviceType);
+        expect(lastMsgSingleton.device).toBe("SimDevice");
+
+        testInterface.simDeviceUpdateToWpilib("SimDevice", 1, null, { foo: 2 });
+        const lastMsgIndex = testInterface.getLastOutboundMessage();
+        expect(lastMsgIndex.type).toBe(SimDeviceType);
+        expect(lastMsgIndex.device).toBe("SimDevice[1]");
+
+        testInterface.simDeviceUpdateToWpilib("SimDevice", 1, 6, { foo: 2 });
+        const lastMsgIndexChannel = testInterface.getLastOutboundMessage();
+        expect(lastMsgIndexChannel.type).toBe(SimDeviceType);
+        expect(lastMsgIndexChannel.device).toBe("SimDevice[1,6]");
+
+    })
 });
