@@ -154,10 +154,15 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
         this._sendWpilibUpdateMessage(msg);
     }
 
-    public simDeviceUpdateToWpilib(deviceName: string, deviceChannel: number | null, payload: SimDevicePayload): void {
+    public simDeviceUpdateToWpilib(deviceName: string, deviceIndex: number | null, deviceChannel: number | null, payload: SimDevicePayload): void {
         let deviceIdent: string = deviceName;
-        if (deviceChannel !== null) {
-            deviceIdent += `[${deviceChannel}]`;
+        if (deviceIndex !== null) {
+            if (deviceChannel !== null) {
+                deviceIdent += `[${deviceIndex},${deviceChannel}]`;
+            }
+            else {
+                deviceIdent += `[${deviceIndex}]`;
+            }
         }
 
         const msg: IWpilibWsMsg = {
