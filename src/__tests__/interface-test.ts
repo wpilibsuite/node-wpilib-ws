@@ -79,6 +79,51 @@ describe("WPILibWSInterface - Incoming Messages", () => {
             }
         });
     });
+
+    it("should resolve a singleton SimDevice name", (done) => {
+        testInterface.once("simDeviceEvent", (deviceName, index, channel, payload) => {
+            expect(deviceName).toBe("SimDevice");
+            expect(index).toBe(null);
+            expect(channel).toBe(null);
+            done();
+        });
+
+        testInterface.simulateIncomingMessage({
+            type: SimDeviceType,
+            device: "SimDevice",
+            data: {}
+        });
+    });
+
+    it("should resolve a SimDevice with index", (done) => {
+        testInterface.once("simDeviceEvent", (deviceName, index, channel, payload) => {
+            expect(deviceName).toBe("SimDevice");
+            expect(index).toBe(2);
+            expect(channel).toBe(null);
+            done();
+        });
+
+        testInterface.simulateIncomingMessage({
+            type: SimDeviceType,
+            device: "SimDevice[2]",
+            data: {}
+        });
+    });
+
+    it("should resolve a SimDevice with index and channel", (done) => {
+        testInterface.once("simDeviceEvent", (deviceName, index, channel, payload) => {
+            expect(deviceName).toBe("SimDevice");
+            expect(index).toBe(1);
+            expect(channel).toBe(54);
+            done();
+        });
+
+        testInterface.simulateIncomingMessage({
+            type: SimDeviceType,
+            device: "SimDevice[1,54]",
+            data: {}
+        });
+    });
 });
 
 describe("WPILibWSInterface - Outgoing Messages", () => {
