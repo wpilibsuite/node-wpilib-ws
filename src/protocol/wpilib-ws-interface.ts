@@ -280,19 +280,29 @@ export default abstract class WPILibWSInterface extends (EventEmitter as new () 
 
             case SimDeviceType: {
                 // SimDevice "device" name could be of the form `deviceName` or `deviceName[channel]`
-                const indexRegex = /\[([0-9]+)\]/;
+                const indexRegex = /\[([0-9,]+)\]/;
                 const deviceIdxResult = indexRegex.exec(msg.device);
                 let deviceName: string = "";
+                let deviceIndex: number | null = null;
                 let deviceChannel: number | null = null;
 
                 if (deviceIdxResult !== null) {
-                    deviceChannel = parseInt(deviceIdxResult[1], 10);
+                    const idxParts = deviceIdxResult[1].split(",");
+
+                    if (idxParts.length >= 1) {
+                        deviceIndex = parseInt(idxParts[0], 10);
+                    }
+
+                    if (idxParts.length >= 2) {
+                        deviceChannel = parseInt(idxParts[1], 10);
+                    }
+
                     deviceName = msg.device.substr(0, deviceIdxResult.index);
                 }
                 else {
                     deviceName = msg.device;
                 }
-                this.emit("simDeviceEvent", deviceName, deviceChannel, msg.data as SimDevicePayload);
+                this.emit("simDeviceEvent", deviceName, deviceIndex, deviceChannel, msg.data as SimDevicePayload);
 
             } break;
         }

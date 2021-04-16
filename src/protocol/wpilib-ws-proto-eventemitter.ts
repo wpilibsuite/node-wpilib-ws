@@ -23,7 +23,7 @@ interface WpilibWsProtocolEvents extends BaseEvents {
     pwmEvent: (channel: number, payload: PWMPayload) => void;
     relayEvent: (channel: number, payload: RelayPayload) => void;
     roboRioEvent: (payload: RoboRIOPayload) => void;
-    simDeviceEvent: (deviceName: string, deviceChannel: number | null, payload: SimDevicePayload) => void;
+    simDeviceEvent: (deviceName: string, deviceIndex: number | null, deviceChannel: number | null, payload: SimDevicePayload) => void;
 }
 
 export type WpilibWsEventEmitter = StrictEventEmitter<EventEmitter, WpilibWsProtocolEvents>;
