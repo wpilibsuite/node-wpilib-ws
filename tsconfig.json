@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "ESNext",
         "esModuleInterop": true,
         "declaration": true,
-        "target": "es6",
+        "target": "ESNext",
         "noImplicitAny": true,
-        "moduleResolution": "node",
+        "moduleResolution": "Node",
         "sourceMap": true,
         "outDir": "dist",
         "baseUrl": ".",
@@ -13,7 +13,12 @@
             "*": [
                 "node_modules/"
             ]
-        }
+        },
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
     },
     "include": [
         "src/**/*"
